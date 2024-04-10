@@ -26,8 +26,17 @@ def my_login(request):
         form = LoginForm(request, data=request.POST)
 
         if form.is_valid():
-            username = request.POST.
-    return render(request, 'myapp/my-login.html') 
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            user = authenticate(request, username=username, password = password)
+
+            if user is not None:
+                auth.login(request, user)
+
+                return redirect('dashboard')
+    context = {"form":form}
+    return render(request, 'myapp/my-login.html', context) 
 
 def dashboard(request):
     return render(request, 'myapp/dashboard.html') 
