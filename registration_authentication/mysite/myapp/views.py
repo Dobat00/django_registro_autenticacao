@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from myapp.forms import CreateUserForm, LoginForm
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 def homepage(request):
     return render(request, 'myapp/index.html') 
@@ -38,5 +39,11 @@ def my_login(request):
     context = {"form":form}
     return render(request, 'myapp/my-login.html', context) 
 
+@login_required(login_url='my_login')
 def dashboard(request):
     return render(request, 'myapp/dashboard.html') 
+
+def user_logout(request):
+    auth.logout(request)
+
+    return redirect('homepage')
